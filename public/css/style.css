@@ -1227,7 +1227,7 @@
 			display: inline-block
 		}
 
-		#cpf {
+		.input-form {
 			width: 100%;
 			padding-left: 10px;
 			/* Adiciona padding do lado esquerdo */
@@ -1275,7 +1275,7 @@ input[type="text"] {
 	font-weight: 700;
 }
 
-#cpf {
+.input-form {
 	border: solid 1px #D4DAE0;
 	border-radius: 10px;
 	height: 50px;

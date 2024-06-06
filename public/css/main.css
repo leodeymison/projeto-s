@@ -3,5 +3,40 @@
     color: rgb(105, 105, 105);
     font-family: roboto, arial, sans-serif;
     font-size: 14px;
-    padding: 5px;
+    padding: 0px 5px;
+}
+.form-infor {
+    color: rgb(49, 49, 49);
+    font-family: roboto, arial, sans-serif;
+    font-size: 18px;
+    padding: 0px 5px;
+    display: flex;
+    margin: 0px 0px 15px 0px;
+}
+#time-main {
+    font-family: roboto, arial, sans-serif;
+    font-weight: 600;
+    margin: 1em 0;
+}
+#span-email {
+    color: rgb(143, 143, 143);
+    font-size: 12px;
+}
+.load-item {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: rgb(143, 143, 143);
+}
+.load-item p {
+    margin: 10px 0px;
+}
+.load-item.desactive {
+    color: rgb(143, 143, 143);
+}
+.load-item.active {
+    color: #E7428E;
+}
+.load-item span {
+    margin-right: 10px;
 }
