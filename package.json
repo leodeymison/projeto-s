@@ -24,6 +24,8 @@
     "typescript": "^5"
   },
   "engines": {
-    "pnpm": ">=6.0.0"
+    "pnpm": ">=6.0.0",
+    "node": ">=20.x"
+
   }
 }
