@@ -1,0 +1,40 @@
+Página 1 - Digitar Dados
+
+Headline: Consulte sua Indenização
+	- Campo de CPF > API de Consultas
+
+# Caso já consultado mandar para página 3;
+
+Pagina 2 - Confirmação
+
+ 	- Nome Completo > CPF Formatado > Sexo > Data da Solicitação
+	- Confirmar Ano de Nascimento
+	- Confirmar
+
+Página 3 - Temporizador
+
+Barra de tempo > Passos > Timer
+
+	HEADLINE
+	{{primeironome}}, acompanhe sua solicitação...
+
+ 	BARRA DE PROGRESSO
+	- Imposto Transicional > Encargos > Score > Indenização Solicitada > Indenização Confirmada | (Temporizador)
+	Pagamento Previsto: XX/XX/XXXX (Dois dias após primeira consulta)
+	Botão Prosseguir (Disponivel Somente Na Data Prevista)
+
+	SUPORTE
+	- Campos de Contato Suporte
+		- Somente E-mail
+			- Os E-mails são respondidos em até 2 horas
+
+Página 4 - Erro
+
+	Headline: {{primeironome}}, Identificamos que alguns de seus dados para depósitos estão incorretos
+	"Por favor, entre em contato com o nosso suporte para atualizá-los e garantir o recebimento de sua indenização."
+
+	Botão: Entra em contato
+
+	SUPORTE
+	- Campos de Contato Suporte
+		- Email e WhatsApp
