@@ -1,0 +1,1 @@
+heroku buildpacks:set https://github.com/Le0Developer/heroku-buildpack-pnpm.git
