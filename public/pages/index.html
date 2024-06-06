@@ -7,6 +7,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="robots" content="noindex, nofollow">
 
+	<link rel="shortcut icon" href="/images/images.png" type="image/x-icon">
+
 	<link rel="stylesheet" id="elementor-frontend-css" href="/css/frontend-lite.min.css" media="all">
 	<link rel="stylesheet" id="swiper-css" href="/css/swiper.min.css" media="all">
 	<link rel="stylesheet" id="elementor-post-6-css" href="/css/post-6.css" media="all">
@@ -73,13 +75,11 @@
 								<div class="elementor-widget-container">
 									<div class="container">
 										<div class="form-wrapper">
-											<form id="cpfForm" onsubmit="return false;">
-												<input type="text" class="input-form" id="cpf" name="cpf"
-													placeholder="Digite seu CPF" maxlength="14" required="">
-												<br><br>
-												<button type="submit" class="custom-button"
-													onclick="redirecionar()">Continuar</button>
-											</form>
+											<input type="text" class="input-form" id="input-cpf" name="cpf"
+												placeholder="Digite seu CPF" maxlength="14" required="">
+											<br><br>
+											<button type="button" class="custom-button"
+												onclick="verifyCpf()">Continuar</button>
 										</div>
 									</div>
 								</div>
@@ -135,5 +135,57 @@
 		</div>
 	</div>
 </body>
+
+
+<script>
+	function isValidCPF(cpf) {
+		cpf = cpf.replace(/[^\d]+/g, "");
+		if (cpf.length !== 11 || !!cpf.match(/(\d)\1{10}/)) {
+			return false;
+		}
+		let sum = 0,
+			remainder;
+		for (let i = 1; i <= 9; i++) {
+			sum = sum + parseInt(cpf.substring(i - 1, i)) * (11 - i);
+		}
+		remainder = (sum * 10) % 11;
+		if (remainder === 10 || remainder === 11) remainder = 0;
+		if (remainder !== parseInt(cpf.substring(9, 10))) return false;
+		sum = 0;
+		for (let i = 1; i <= 10; i++) {
+			sum = sum + parseInt(cpf.substring(i - 1, i)) * (12 - i);
+		}
+		remainder = (sum * 10) % 11;
+		if (remainder === 10 || remainder === 11) remainder = 0;
+		if (remainder !== parseInt(cpf.substring(10, 11))) return false;
+		return true;
+	}
+
+	function verifyCpf() {
+		console.log("entrou")
+		const cpf = document.getElementById("input-cpf").value;
+		if (!isValidCPF(cpf)) {
+			alert("CPF inválido. Por favor, insira um CPF válido.");
+			return;
+		}
+
+		fetch(`/api/verify-cpf`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ cpf }),
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				localStorage.setItem("project-s-data", JSON.stringify(data));
+				window.location.href = "/pages/confirm.html"
+			})
+			.catch((error) => {
+				console.error("Error fetching data:", error);
+				alert("Erro ao buscar os dados. Tente novamente.");
+			});
+	}
+</script>
 
 </html>

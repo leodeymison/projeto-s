@@ -1,19 +1,64 @@
+import { JSONFilePreset } from 'lowdb/node'
+type defaultDataType = {
+	peoples: Array<{
+		nome: string,
+		nascimento: string,
+		sexo: string,
+		cns: string,
+		createdAt: number
+	}>
+}
+
 export async function POST(req: Request) {
 	const b = await req.json();
 
-	const cpf = b["cpf"];
+	let cpf = b["cpf"];
+	const user = "d24c8207759c17e03d384e7f4dbce11c";
 
-	const r = await fetch(
-		`https://api1.info-finder.online/api/cpf?cpf=${cpf}&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21lIjoidmluaSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzA2OTEzMzE3LCJleHAiOjg4MTA2OTEzMzE3fQ.Pz9WQSsZBTslFFgc6xhFIATKU70oYl0Ybg6bxL5UbVU`
-	);
+	if(cpf){
+		cpf = cpf.replace(/\D/g, '');
+	} else {
+		return Response.json({
+			message: "CPF é obrigatório"
+		});
+	}
 
-	const data = await r.json();
+	const defaultData: defaultDataType = { peoples: [] }
+	const db = await JSONFilePreset<defaultDataType>('db.json', defaultData);
+	const exist = db.data.peoples.filter(item => item.cns === cpf && item);
 
-	const d = data["DADOS"][0];
+	if(exist[0]){
+		// ? USA REGISTRO EXISTENTE
+		return Response.json({
+			nome: exist[0].nome,
+			nascimento: exist[0].nascimento,
+			sexo: exist[0].sexo,
+			createdAt: exist[0].createdAt,
+			cns: exist[0].cns,
+		});
+	} else {
+		// ? BUSCA E CRIAR REGISTRO
+		const r = await fetch(
+			`https://apiconsultas.store/api/?usuario=${user}&api=cpf&cpf=${cpf}`
+		);
+	
+		const data = await r.json();
+		const date_current = Date.now();
 
-	return Response.json({
-		name: d["NOME"],
-		birth: d["NASC"],
-		mother: d["NOME_MAE"],
-	});
+		await db.update(({ peoples }) => peoples.push({
+			nome: data["nome"],
+			nascimento: data["nascimento"],
+			sexo: data["sexo"],
+			createdAt: date_current,
+			cns: data["cns"],
+		}))
+
+		return Response.json({
+			nome: data["nome"],
+			nascimento: data["nascimento"],
+			sexo: data["sexo"],
+			createdAt: date_current,
+			cns: data["cns"],
+		});
+	}
 }

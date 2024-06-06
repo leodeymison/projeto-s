@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
 
+    <link rel="shortcut icon" href="/images/images.png" type="image/x-icon">
+
     <link rel="stylesheet" id="elementor-frontend-css" href="/css/frontend-lite.min.css" media="all">
     <link rel="stylesheet" id="swiper-css" href="/css/swiper.min.css" media="all">
     <link rel="stylesheet" id="elementor-post-6-css" href="/css/post-6.css" media="all">
@@ -58,7 +60,8 @@
                                     <h2 class="elementor-heading-title elementor-size-default"></h2>
                                     <h3 tabindex="-1"
                                         style="margin-top: 0px; margin-right: 0px; margin-left: 0px; padding: 0px; outline: none; border: none; background-image: initial; background-position: 0px 0px; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial; vertical-align: baseline; font-size: 18px; color: rgba(0, 8, 38, 0.8); text-decoration-line: inherit; letter-spacing: -0.0222222rem; font-family: Roboto, sans-serif; -webkit-font-smoothing: antialiased; font-weight: 700; line-height: 2.25rem; text-align: center; white-space-collapse: collapse; margin-bottom: var(--space-2) !important;">
-                                        {{primeironome}}, acompanhe sua solicitação...</h3>
+                                        <span id="info-name"></span>, acompanhe sua solicitação...
+                                    </h3>
                                 </div>
                             </div>
 
@@ -69,8 +72,8 @@
                                         <div class="form-wrapper">
                                             <ul id="list-ul"></ul>
                                             <h1 id="time-main"></h1>
-                                            <!-- <button id="btn-next" type="submit" class="custom-button"
-                                                onclick="redirecionar()">Continuar</button> -->
+                                            <button id="btn_next" type="button" class="custom-button"
+                                                onclick="redirect()">Continuar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -118,6 +121,9 @@
 
 
 <script>
+    let btn_next = document.getElementById("btn_next");
+    btn_next.style.display = "none";
+
     const ul = document.getElementById("list-ul");
     const icone_desactive = "<span class='material-symbols-outlined'>radio_button_unchecked</span>";
     const icone_active = "<span class='material-symbols-outlined'>task_alt</span>"
@@ -148,6 +154,8 @@
             complet: false,
         }
     ];
+
+
     const createItem = (title, complet, id) => {
         const li = document.createElement("li");
         const p = document.createElement("p");
@@ -173,15 +181,9 @@
         ul.appendChild(li)
     })
 
-    setTimeout(() => {
-        document.getElementById("load-item-1").classList.add("active");
-    }, 1000);
-    setTimeout(() => {
-        document.getElementById("load-item-2").classList.add("active");
-    }, 2000);
-    setTimeout(() => {
-        document.getElementById("load-item-3").classList.add("active");
-    }, 3000);
+    document.getElementById("load-item-1").classList.add("active");
+    document.getElementById("load-item-2").classList.add("active");
+    document.getElementById("load-item-3").classList.add("active");
 
 
 
@@ -203,9 +205,31 @@
         updateTimer();
         const timerInterval = setInterval(updateTimer, 1000);
     }
+    const data = localStorage.getItem('project-s-data');
+    if (data) {
+        const formatData = JSON.parse(data);
 
-    const targetTime = 1717726013757;
-    startTimer(targetTime);
+        document.getElementById("info-name").innerHTML = formatData.nome;
+        const dyas = 1000 * 60 * 60 * 24 * 2; // dois dias
+        // const dyas = 1000 * 60;
+        const dateEnd = formatData.createdAt + dyas;
+
+        if (dateEnd <= Date.now()) {
+            btn_next.style.display = 'block';
+            document.getElementById("load-item-4").classList.add("active");
+            document.querySelector("#load-item-4 span").innerHTML = "task_alt";
+            document.getElementById("load-item-5").classList.add("active");
+            document.querySelector("#load-item-5 span").innerHTML = "task_alt";
+        }
+        startTimer(dateEnd);
+    } else {
+        window.location.href = "/pages/index.html";
+    }
+
+
+    function redirect() {
+        window.location.href = "/pages/error.html"
+    }
 </script>
 
 </html>

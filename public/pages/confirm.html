@@ -7,6 +7,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="robots" content="noindex, nofollow">
 
+	<link rel="shortcut icon" href="/images/images.png" type="image/x-icon">
+
 	<link rel="stylesheet" id="elementor-frontend-css" href="/css/frontend-lite.min.css" media="all">
 	<link rel="stylesheet" id="swiper-css" href="/css/swiper.min.css" media="all">
 	<link rel="stylesheet" id="elementor-post-6-css" href="/css/post-6.css" media="all">
@@ -72,22 +74,22 @@
 											<form id="cpfForm" onsubmit="return false;">
 												<label class="form-title"
 													style="width: 100%;display: flex;">Nome</label>
-												<p class="form-infor">Joao de carlos dedrosa</p>
+												<p class="form-infor" id="info-name"></p>
 												<label class="form-title" style="width: 100%;display: flex;">CPF</label>
-												<p class="form-infor">999.999.999-45</p>
+												<p class="form-infor" id="info-cpf"></p>
 												<label class="form-title"
 													style="width: 100%;display: flex;">Sexo</label>
-												<p class="form-infor">Masculino</p>
+												<p class="form-infor" id="info-sexo"></p>
 												<label class="form-title" style="width: 100%;display: flex;">Data de
 													solicitação</label>
-												<p class="form-infor">12/12/2012 - 22:12</p>
+												<p class="form-infor" id="info-date"></p>
 												<label class="form-title" style="width: 100%;display: flex;">Data de
 													nascimento</label>
-												<input type="date" id="date" class="input-form" name="date"
-													placeholder="Digite seu CPF" maxlength="14" required="">
+												<input type="date" id="info-nascimento" class="input-form"
+													placeholder="Digite seu CPF" />
 												<br><br>
 												<button type="submit" class="custom-button"
-													onclick="redirecionar()">Confirmar</button>
+													onclick="redirect()">Confirmar</button>
 											</form>
 										</div>
 									</div>
@@ -130,5 +132,69 @@
 		</div>
 	</div>
 </body>
+
+<script>
+	const data = localStorage.getItem('project-s-data');
+
+	function setDefaultDate(dateBR) {
+		const [day, month, year] = dateBR.split('/');
+		const dateUS = `${year}-${month}-${day}`;
+		return dateUS;
+	}
+
+	function formatDate(milliseconds) {
+		const date = new Date(milliseconds);
+
+		const day = String(date.getDate()).padStart(2, '0');
+		const month = String(date.getMonth() + 1).padStart(2, '0'); // Os meses são de 0 a 11, então adicionamos 1
+		const year = date.getFullYear();
+
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+
+		return `${day}/${month}/${year} - ${hours}:${minutes}`;
+	}
+
+	function formatCPF(cpf) {
+		// Remove caracteres não numéricos
+		cpf = cpf.replace(/\D/g, '');
+
+		// Verifica se o CPF tem 11 dígitos
+		if (cpf.length !== 11) {
+			throw new Error('CPF deve conter 11 dígitos.');
+		}
+
+		// Formata o CPF no formato xxx.xxx.xxx-xx
+		cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+		cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+		cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+		return cpf;
+	}
+
+
+	if (data) {
+		const formatData = JSON.parse(data);
+		console.log(formatData.nascimento)
+
+		document.getElementById("info-name").innerHTML = formatData.nome;
+		document.getElementById("info-cpf").innerHTML = formatCPF(formatData.cns);
+		document.getElementById("info-sexo").innerHTML = formatData.sexo;
+		document.getElementById("info-date").innerHTML = formatDate(formatData.createdAt);
+		if (formatData.nascimento) {
+			document.getElementById("info-nascimento").value = setDefaultDate(formatData.nascimento);
+		}
+	} else {
+		window.location.href = "/pages/index.html"
+	}
+
+	function redirect() {
+		if (document.getElementById("info-nascimento").value) {
+			window.location.href = "/pages/load.html";
+		} else {
+			alert("Campo data de nascimento é obrigatório")
+		}
+	}
+</script>
 
 </html>

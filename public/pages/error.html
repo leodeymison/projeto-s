@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
 
+    <link rel="shortcut icon" href="/images/images.png" type="image/x-icon">
+
     <link rel="stylesheet" id="elementor-frontend-css" href="/css/frontend-lite.min.css" media="all">
     <link rel="stylesheet" id="swiper-css" href="/css/swiper.min.css" media="all">
     <link rel="stylesheet" id="elementor-post-6-css" href="/css/post-6.css" media="all">
@@ -58,7 +60,8 @@
                                     <h2 class="elementor-heading-title elementor-size-default"></h2>
                                     <h3 tabindex="-1"
                                         style="margin-top: 0px; margin-right: 0px; margin-left: 0px; padding: 0px; outline: none; border: none; background-image: initial; background-position: 0px 0px; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial; vertical-align: baseline; font-size: 18px; color: rgba(0, 8, 38, 0.8); text-decoration-line: inherit; letter-spacing: -0.0222222rem; font-family: Roboto, sans-serif; -webkit-font-smoothing: antialiased; font-weight: 700; line-height: 2.25rem; text-align: center; white-space-collapse: collapse; margin-bottom: var(--space-2) !important;">
-                                        {{primeironome}}, Identificamos que alguns de seus dados para depósitos estão
+                                        <span id="info-name"></span>, Identificamos que alguns de seus dados para
+                                        depósitos estão
                                         incorretos
                                     </h3>
                                     <p style="text-align: center;margin-top: 2em;">Por favor, entre em contato com o
@@ -112,94 +115,14 @@
 
 
 <script>
-    const ul = document.getElementById("list-ul");
-    const icone_desactive = "<span class='material-symbols-outlined'>radio_button_unchecked</span>";
-    const icone_active = "<span class='material-symbols-outlined'>task_alt</span>"
-    const load_list = [
-        {
-            id: 1,
-            title: "Imposto Transicional",
-            complet: true,
-        },
-        {
-            id: 2,
-            title: "Encargos",
-            complet: true,
-        },
-        {
-            id: 3,
-            title: "Score",
-            complet: true,
-        },
-        {
-            id: 4,
-            title: "Indenização Solicitada",
-            complet: false,
-        },
-        {
-            id: 5,
-            title: "Indenização Confirmada",
-            complet: false,
-        }
-    ];
-    const createItem = (title, complet, id) => {
-        const li = document.createElement("li");
-        const p = document.createElement("p");
+    const data = localStorage.getItem('project-s-data');
+    if (data) {
+        const formatData = JSON.parse(data);
 
-        li.classList.add("load-item")
-
-        p.innerHTML = title;
-
-        li.id = "load-item-" + id;
-        if (complet) {
-            li.innerHTML = icone_active;
-        } else {
-            li.innerHTML = icone_desactive;
-        }
-
-        li.appendChild(p)
-
-        return li;
+        document.getElementById("info-name").innerHTML = formatData.nome;
+    } else {
+        window.location.href = "/pages/index.html";
     }
-
-    load_list.forEach(element => {
-        const li = createItem(element.title, element.complet, element.id);
-        ul.appendChild(li)
-    })
-
-    setTimeout(() => {
-        document.getElementById("load-item-1").classList.add("active");
-    }, 1000);
-    setTimeout(() => {
-        document.getElementById("load-item-2").classList.add("active");
-    }, 2000);
-    setTimeout(() => {
-        document.getElementById("load-item-3").classList.add("active");
-    }, 3000);
-
-
-
-    function startTimer(targetTimeInMs) {
-        function updateTimer() {
-            const now = new Date().getTime();
-            const timeDiff = targetTimeInMs - now;
-            if (timeDiff > 0) {
-                const hours = Math.floor(timeDiff / (1000 * 60 * 60));
-                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-                document.getElementById('time-main').innerText = `${hours}:${minutes}:${seconds}`;
-            } else {
-                document.getElementById('time-main').innerText = '00:00:00';
-                clearInterval(timerInterval);
-            }
-        }
-
-        updateTimer();
-        const timerInterval = setInterval(updateTimer, 1000);
-    }
-
-    const targetTime = 1717726013757;
-    startTimer(targetTime);
 </script>
 
 </html>

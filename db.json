@@ -1,0 +1,18 @@
+{
+  "peoples": [
+    {
+      "nome": "LEODEYMISON GOMES DE ALCANTARA",
+      "nascimento": "16/04/2003",
+      "sexo": "N/A",
+      "createdAt": 1717645161474,
+      "cns": "02863029185"
+    },
+    {
+      "nome": "MARCIA MARIA DE ALCANTARA SOUZA",
+      "nascimento": "23/02/1983",
+      "sexo": "FEMININO",
+      "createdAt": 1717645390704,
+      "cns": "97552070153"
+    }
+  ]
+}
