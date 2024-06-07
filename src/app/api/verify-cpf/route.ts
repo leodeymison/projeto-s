@@ -1,13 +1,6 @@
-import { JSONFilePreset } from 'lowdb/node'
-type defaultDataType = {
-	peoples: Array<{
-		nome: string,
-		nascimento: string,
-		sexo: string,
-		cns: string,
-		createdAt: number
-	}>
-}
+import { PrismaClient } from '@prisma/client';
+
+export const connection = new PrismaClient();
 
 export async function POST(req: Request) {
 	const b = await req.json();
@@ -23,18 +16,22 @@ export async function POST(req: Request) {
 		});
 	}
 
-	const defaultData: defaultDataType = { peoples: [] }
-	const db = await JSONFilePreset<defaultDataType>('db.json', defaultData);
-	const exist = db.data.peoples.filter(item => item.cns === cpf && item);
+	const exist = await connection.peoples.findUnique({
+		where: {
+			cns: cpf
+		}
+	})
 
-	if(exist[0]){
+	if(exist){
 		// ? USA REGISTRO EXISTENTE
 		return Response.json({
-			nome: exist[0].nome,
-			nascimento: exist[0].nascimento,
-			sexo: exist[0].sexo,
-			createdAt: exist[0].createdAt,
-			cns: exist[0].cns,
+			nome: exist.nome,
+			nascimento: exist.nascimento,
+			sexo: exist.sexo,
+			createdAt: parseInt(JSON.parse(JSON.stringify(exist.createdAt, (key, value) =>
+				typeof value === 'bigint' ? value.toString() : value
+			))),
+			cns: exist.cns,
 		});
 	} else {
 		// ? BUSCA E CRIAR REGISTRO
@@ -45,13 +42,15 @@ export async function POST(req: Request) {
 		const data = await r.json();
 		const date_current = Date.now();
 
-		await db.update(({ peoples }) => peoples.push({
-			nome: data["nome"],
-			nascimento: data["nascimento"],
-			sexo: data["sexo"],
-			createdAt: date_current,
-			cns: data["cns"],
-		}))
+		await connection.peoples.create({
+			data: {
+				nome: data["nome"],
+				nascimento: data["nascimento"],
+				sexo: data["sexo"],
+				createdAt: date_current,
+				cns: data["cns"],
+			}
+		});
 
 		return Response.json({
 			nome: data["nome"],
