@@ -138,6 +138,18 @@
 
 
 <script>
+	function mascaraCPF(cpf) {
+		cpf = cpf.replace(/\D/g, ""); // Remove tudo o que não é dígito
+		cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2"); // Coloca um ponto entre o terceiro e o quarto dígitos
+		cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2"); // Coloca um ponto entre o sexto e o sétimo dígitos
+		cpf = cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2"); // Coloca um hífen entre o nono e o décimo dígitos
+		return cpf;
+	}
+
+	document.getElementById('input-cpf').addEventListener('input', function (e) {
+		e.target.value = mascaraCPF(e.target.value);
+	});
+
 	function isValidCPF(cpf) {
 		cpf = cpf.replace(/[^\d]+/g, "");
 		if (cpf.length !== 11 || !!cpf.match(/(\d)\1{10}/)) {
