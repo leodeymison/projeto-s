@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-export const connection = new PrismaClient();
+const connection = new PrismaClient();
 
 export async function POST(req: Request) {
 	const b = await req.json();
